@@ -1,8 +1,10 @@
 
 const express = require('express');
 // import custom books
-
 let books = require('../data/books');
+
+// import model of database
+const Book = require('../models/Book');
 
 // express.Router() --> is used to handle different routes moudalizer
 const router = express.Router();
@@ -11,9 +13,27 @@ const router = express.Router();
 router.route('/')
 
     // get all books 
-    .get((req, res) => {
+    .get(async (req, res) => {
         // convert JSON code to string for readable to the network
-        res.json(books);
+        // res.json(books);
+
+        // get books data from db --> find() is an async function
+        // so, use either then or asyn/awiat
+
+        // method 1 - using Promise i.e. then/catch
+        // Book.find()
+        // .then(books => res.json(books))
+        // .catch(err => console.log(err));
+
+        // method 2 - using asyn/await 
+
+        try {
+            const books = await Book.find();
+            res.json(books);
+        }
+        catch (error) {
+            console.log(error);
+        }
 
     })
 
