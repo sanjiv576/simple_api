@@ -14,7 +14,7 @@ router.route('/')
             });
     })
 
-    // add a book in the database
+    // add a book in the database  -- method 1
     .post((req, res) => {
 
         if (!req.body.title) res.status(400).json({ "error": "title is missing" });
