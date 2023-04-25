@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 // create Schema  --> build strcture to store data
 const bookSchema = new mongoose.Schema({
 
-    title : {
+    title: {
         type: String,
         required: true
     },
@@ -12,7 +12,7 @@ const bookSchema = new mongoose.Schema({
         type: String,
         default: 'Anonymous'
     }
-}, {timestamps: true});  // timestamps --> track when the book is added/updated
+}, { timestamps: true });  // timestamps --> track when the book is added/updated
 
 // we use model to use database not by Schema
 module.exports = mongoose.model('Book', bookSchema);

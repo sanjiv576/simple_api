@@ -39,22 +39,19 @@ router.route('/')
 
     // add a book in the books list
 
-    .post((req, res) => {
+    .post((req, res, next) => {
         Book.create(req.body)
             .then(book => res.status(201).json(book))
-            .catch((err) => {
-                console.log(err);
-                res.json({ "error": "Something went wrong" });
-            });
+            .catch(next);
     })
 
-    .put((req, res) => {
+    .put((req, res, next) => {
         res.status(405).json({ "error": "PUT request is not allowed" });
     })
     .delete((req, res) => {
         Book.deleteMany()
             .then(() => res.status(201).json({ "message": "Deleted all successfully" }))
-            .catch((err) => console.log(err));
+            .catch(next);
     });
 
 
@@ -62,38 +59,38 @@ router.route('/')
 router.route('/:book_id')
 
     // get only specific book
-    .get((req, res) => {
+    .get((req, res, next) => {
         Book.findById(req.params.book_id)
-            .then(book => res.json(book))
-            .catch(err => {
-                console.log(err);
-                res.json({ "error": "Something went wrong" });
-            });
+            .then(book => {
+                // send this error handling if the book is not found
+                if(!book){
+                    res.status(404).json({error: "Book not found"});
+                }
+                res.json(book);
+            })
+            .catch(next);
     })
 
     // update particular book
-    .put((req, res) => {
+    .put((req, res, next) => {
         Book.findByIdAndUpdate(
             req.params.book_id,  // find this id book
             { $set: req.body },  // update the changed data
             { new: true }  // return updated data not old one
         )
             .then(updatedBook => res.status(200).json(updatedBook))
-            .catch(err => {
-                console.log(err);
-                res.json({ "error": "Something went wrong" });
-            })
+            .catch(next)
     })
 
     // delete particular book
-    .delete((req, res) => {
+    .delete((req, res, next) => {
         Book.findByIdAndDelete(
             req.params.book_id
         )
             .then(() => res.status(204).end())
             .catch(err => {
                 console.log(err);
-                res.json({ "error": "Something went wrong" });
+                next(err);
             })
     })
     .post((req, res) => {
