@@ -63,8 +63,8 @@ router.route('/:book_id')
         Book.findById(req.params.book_id)
             .then(book => {
                 // send this error handling if the book is not found
-                if(!book){
-                    res.status(404).json({error: "Book not found"});
+                if (!book) {
+                    res.status(404).json({ error: "Book not found" });
                 }
                 res.json(book);
             })
@@ -87,7 +87,10 @@ router.route('/:book_id')
         Book.findByIdAndDelete(
             req.params.book_id
         )
-            .then(() => res.status(204).end())
+            .then((deletedBook) => {
+                if (!deletedBook) res.status(404).json({ "erorr": "No found" });
+                res.status(202).end();
+            })
             .catch(err => {
                 console.log(err);
                 next(err);
