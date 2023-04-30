@@ -177,7 +177,7 @@ router.route('/:book_id/reviews/:review_id')
                 // update review by traversing 
                 book.reviews = book.reviews.map(singleReview => {
                     // update the review whose id  matches  , _id is an object so, == is used instead of ===
-                    if (singleReview._id == req.params.review_id) {
+                    if (singleReview.id === req.params.review_id) {
                         singleReview.text = req.body.text
                     }
                     return singleReview;
@@ -199,7 +199,7 @@ router.route('/:book_id/reviews/:review_id')
 
                 // delete specific review only
                 book.reviews = book.reviews.filter(singleReview => {
-                    return singleReview._id != req.params.review_id;
+                    return singleReview.id !== req.params.review_id;
                 })
                 // use save() when you create own algorithm to save without using methods of mongoose
                 book.save()

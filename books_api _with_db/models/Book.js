@@ -1,5 +1,6 @@
 
 const mongoose = require('mongoose');
+const books = require('../data/books');
 
 // Schema for review
 const reviewSchema = new mongoose.Schema({
@@ -7,6 +8,21 @@ const reviewSchema = new mongoose.Schema({
         type: String,
         required: true,
         minLength: 10
+    }
+});
+
+// conversion of Object type of _id of DB into String type
+
+reviewSchema.set('toJSON', {
+    transform: (document, returnedDocument) => {
+
+        // convert object of _id into String type
+        returnedDocument.id = document._id.toString();
+
+        // delete unncecessary _id and version from the returned document but these do not delete from database
+        delete returnedDocument._id;
+        delete returnedDocument.__v;
+
     }
 });
 
@@ -23,6 +39,20 @@ const bookSchema = new mongoose.Schema({
     },
     reviews: [reviewSchema]
 }, { timestamps: true });  // timestamps --> track when the book is added/updated
+
+
+// conversion of Object type of _id of DB into String type
+bookSchema.set('toJSON', {
+    transform: (document, returnedDocument) => {
+
+        // convert object of db into String
+        returnedDocument.id = document._id.toString()
+
+        // delete unncecessary _id and version from the returned document but these do not delete from database
+        delete returnedDocument._id;
+        delete returnedDocument.__v;
+    }
+});
 
 // we use model to use database not by Schema
 module.exports = mongoose.model('Book', bookSchema);
