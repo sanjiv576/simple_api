@@ -8,6 +8,11 @@ const reviewSchema = new mongoose.Schema({
         type: String,
         required: true,
         minLength: 10
+    },
+
+    user: {
+        type: mongoose.Schema.Types.ObjectId,  // here, Object id is taken of user Schema
+        ref: 'User'  // here, model is used
     }
 });
 

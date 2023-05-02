@@ -6,6 +6,10 @@ const express = require('express');
 // import different routes
 const books_routes = require('./routes/book_routes');
 
+// import user routes
+
+const user_routes = require('./routes/user_routes');
+
 // import mongoose database
 const mongoose = require('mongoose');
 const dbName = '30-b-books'
@@ -31,8 +35,13 @@ app.get('/', (req, res) => {
     res.send('<h1>Hello world</h1>');
 });
 
+// main routes for users
+app.use('/users', user_routes);
+
 // to use data come from client and send it to the routes/book_routes.js
 app.use('/books', books_routes);
+
+
 
 // Error handling middleware --> takes 4 parameters i.e error, request, response, next
 app.use((err, req, res, next) => {
