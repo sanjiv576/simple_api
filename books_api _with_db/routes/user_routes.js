@@ -9,6 +9,9 @@ const User = require('../models/User');
 // import bcrypt for hashing password
 const bcrypt = require('bcryptjs');
 
+// import jsonwebtoken for token generation
+const jwt = require('jsonwebtoken');
+
 
 router.post('/register', (req, res, next) => {
 
@@ -37,6 +40,52 @@ router.post('/register', (req, res, next) => {
             })
         })
         .catch(next);
-})
+});
+
+
+
+// for login
+
+router.post('/login', (req, res, next) => {
+
+    // find user by username
+    User.findOne({username: req.body.username})
+    .then(user => {
+
+        // if the user is not found or not registered
+        if(!user) return res.status(400).json({error : 'User is not found/registered.'});
+
+        // convert the plain text password into hashed password and compare with stored hash password in the db
+        bcrypt.compare(req.body.password, user.password, (err, success) => {
+
+            // if the it is not possible internally
+            if(err) return res.status(500).json({error: err.message});
+
+            // check if the given password is not matching
+            if(!success) return res.status(400).json({error: 'Password does not match.'}); 
+
+
+            // now, issue token and verify the token
+
+            // payload
+            const payload = {
+                id: user.id,
+                username: user.username
+            }
+            // generate/issue the token with parameters i.e payload, secret message
+            jwt.sign(payload,
+                 process.env.SECRET,
+                  {expiresIn: '60'},
+                   (err, token) => {
+                    if(err) return res.status(500).json({error: err.message});
+
+                    // send the token or anything if the token is generated successfully
+                    res.json({status: 'success', token: token, message: 'Go to Dashboard'});
+            });
+        });
+
+    })
+    .catch(next);
+});
 
 module.exports = router;
