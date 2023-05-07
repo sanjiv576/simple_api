@@ -70,12 +70,13 @@ router.post('/login', (req, res, next) => {
             // payload
             const payload = {
                 id: user.id,
-                username: user.username
+                username: user.username,
+                fullName: user.fullName
             }
             // generate/issue the token with parameters i.e payload, secret message
             jwt.sign(payload,
                  process.env.SECRET,
-                  {expiresIn: '60'},
+                  {expiresIn: '60d'},
                    (err, token) => {
                     if(err) return res.status(500).json({error: err.message});
 

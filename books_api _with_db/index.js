@@ -10,6 +10,9 @@ const books_routes = require('./routes/book_routes');
 
 const user_routes = require('./routes/user_routes');
 
+// import custom middleware  --> use this where it is required
+const {verifyUser} = require('./middlewares/auth');
+
 // import mongoose database
 const mongoose = require('mongoose');
 const dbName = '30-b-books'
@@ -38,8 +41,11 @@ app.get('/', (req, res) => {
 // main routes for users
 app.use('/users', user_routes);
 
+// use custom middleware to restrict access only for the books but not users --> for security
+// app.use(verifyUser);  // ----> call this middleware even below statements execute e.g unknown path
+
 // to use data come from client and send it to the routes/book_routes.js
-app.use('/books', books_routes);
+app.use('/books',verifyUser, books_routes);  // --> use 'verifUser' middle ware for only this 
 
 
 
