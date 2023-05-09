@@ -71,7 +71,8 @@ router.post('/login', (req, res, next) => {
             const payload = {
                 id: user.id,
                 username: user.username,
-                fullName: user.fullName
+                fullName: user.fullName,
+                role: user.role
             }
             // generate/issue the token with parameters i.e payload, secret message
             jwt.sign(payload,

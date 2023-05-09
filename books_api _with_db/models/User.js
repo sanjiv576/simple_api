@@ -20,6 +20,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    role : {
+        type: String,
+        enum: ['user', 'admin'],  // fixed roles , add here others role like manager
+        default: 'user'
     }
 });
 

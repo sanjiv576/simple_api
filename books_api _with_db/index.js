@@ -11,7 +11,7 @@ const books_routes = require('./routes/book_routes');
 const user_routes = require('./routes/user_routes');
 
 // import custom middleware  --> use this where it is required
-const {verifyUser} = require('./middlewares/auth');
+const { verifyUser } = require('./middlewares/auth');
 
 // import mongoose database
 const mongoose = require('mongoose');
@@ -45,7 +45,7 @@ app.use('/users', user_routes);
 // app.use(verifyUser);  // ----> call this middleware even below statements execute e.g unknown path
 
 // to use data come from client and send it to the routes/book_routes.js
-app.use('/books',verifyUser, books_routes);  // --> use 'verifUser' middle ware for only this 
+app.use('/books', verifyUser, books_routes);  // --> use 'verifUser' middleware for only this 
 
 
 

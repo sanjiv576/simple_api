@@ -15,6 +15,9 @@ const reviewController = require('../controllers/review_controller');
 // express.Router() --> is used to handle different routes moudalizer
 const router = express.Router();
 
+// middleware for admin verification
+const {verifyAdmin} = require('../middlewares/auth');
+
 // this is main route for /api/books
 router.route('/')
 
@@ -22,8 +25,8 @@ router.route('/')
     .get(bookController.getAllBooks)
 
     // add a book in the books list
-
-    .post(bookController.createBook)
+    // added admin verification middleware ---> here, already user is verified
+    .post(verifyAdmin, bookController.createBook)
 
     .put((req, res, next) => {
         res.status(405).json({ error: "PUT request is not allowed" });

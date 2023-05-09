@@ -21,7 +21,8 @@ const createReview = (req, res, next) => {
             if (!book) res.status(404).json({ error: "Book not found" });
 
             const review = {
-                text: req.body.text
+                text: req.body.text,
+                user: req.user.id // here, user is already verified
             }
 
             book.reviews.push(review);
@@ -78,7 +79,14 @@ const updateAReviewById = (req, res, next) => {
             book.reviews = book.reviews.map(singleReview => {
                 // update the review whose id  matches  , _id is an object so, == is used instead of ===
                 if (singleReview.id === req.params.review_id) {
-                    singleReview.text = req.body.text
+
+                    // only allowt to that particular user who created review
+                    if (singleReview.id === req.user.id) {
+                        singleReview.text = req.body.text
+                    }
+                    else {
+                        console.log('You are not valid user to delete update');
+                    }
                 }
                 return singleReview;
             })
@@ -98,9 +106,20 @@ const deleteAReviewById = (req, res, next) => {
             if (!book) res.status(400).json({ error: "Book not found" });
 
             // delete specific review only
-            book.reviews = book.reviews.filter(singleReview => {
-                return singleReview.id !== req.params.review_id;
+            // book.reviews = book.reviews.filter(singleReview => {    
+            //     return singleReview.id !== req.params.review_id;
+            // })
+
+            book.reviews.forEach(singleReview => {
+
+                if(singleReview.user === req.user.id){
+                    if(singleReview.id !== req.params.review_id){
+                        return singleReview;
+                    }
+                }
             })
+
+
             // use save() when you create own algorithm to save without using methods of mongoose
             book.save()
                 .then(book => res.status(204).end())
