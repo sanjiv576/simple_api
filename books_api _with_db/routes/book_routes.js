@@ -16,7 +16,10 @@ const reviewController = require('../controllers/review_controller');
 const router = express.Router();
 
 // middleware for admin verification
-const {verifyAdmin} = require('../middlewares/auth');
+const {verifyAdmin, verifyManager} = require('../middlewares/auth');
+
+// middleware for manager verification
+// const verifyManager = require('../middlewares/auth');
 
 // this is main route for /api/books
 router.route('/')
@@ -26,12 +29,12 @@ router.route('/')
 
     // add a book in the books list
     // added admin verification middleware ---> here, already user is verified
-    .post(verifyAdmin, bookController.createBook)
+    .post(verifyManager,bookController.createBook)
 
     .put((req, res, next) => {
         res.status(405).json({ error: "PUT request is not allowed" });
     })
-    .delete(bookController.deleteAllBooks);
+    .delete(verifyManager, bookController.deleteAllBooks);
 
 
 // path for /api/books/:book_id

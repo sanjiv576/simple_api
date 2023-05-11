@@ -12,6 +12,10 @@ const user_routes = require('./routes/user_routes');
 
 // import custom middleware  --> use this where it is required
 const { verifyUser } = require('./middlewares/auth');
+const verifyManager = require('./middlewares/auth');
+
+// for uploading images
+const upload = require('./middlewares/upload')
 
 // import mongoose database
 const mongoose = require('mongoose');
@@ -26,6 +30,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/' + dbName)
 
 // create object of express 
 const app = express();
+
+// middleware to allow to access files inside the public folder
+app.use(express.static('public'));
 
 
 // get data from client side
@@ -47,7 +54,15 @@ app.use('/users', user_routes);
 // to use data come from client and send it to the routes/book_routes.js
 app.use('/books', verifyUser, books_routes);  // --> use 'verifUser' middleware for only this 
 
+// for uploading images, 
+// '/uploads'  ==> endpoint
+// upload.single --> function given by multer to insert only single images \
+// 'photo' --> field name that is written in UI form to ensure the particular place where the image comes 
+// req.file --> send the proprities of the uploaded file
 
+app.post('/uploads', upload.single('photo'), (req, res, next) => {
+    res.json(req.file);
+})
 
 // Error handling middleware --> takes 4 parameters i.e error, request, response, next
 app.use((err, req, res, next) => {

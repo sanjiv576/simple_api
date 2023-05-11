@@ -42,7 +42,10 @@ const bookSchema = new mongoose.Schema({
         type: String,
         default: 'Anonymous'
     }, 
-    reviews: [reviewSchema]
+    reviews: [reviewSchema],
+    coverPhoto: {
+        type: String
+    }
 }, { timestamps: true });  // timestamps --> track when the book is added/updated
 
 

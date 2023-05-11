@@ -76,19 +76,21 @@ const updateAReviewById = (req, res, next) => {
             if (!book) res.status(400).json({ error: "Book not found" });
 
             // update review by traversing 
-            book.reviews = book.reviews.map(singleReview => {
+            book.reviews = book.reviews.map(reviewList => {
                 // update the review whose id  matches  , _id is an object so, == is used instead of ===
-                if (singleReview.id === req.params.review_id) {
+                if(reviewList !== null){
+                    if (reviewList.id === req.params.review_id) {
 
-                    // only allowt to that particular user who created review
-                    if (singleReview.id === req.user.id) {
-                        singleReview.text = req.body.text
-                    }
-                    else {
-                        console.log('You are not valid user to delete update');
+                        // only allowt to that particular user who created review
+                        if (reviewList.id === req.user.id) {
+                            reviewList.text = req.body.text
+                        }
+                        else {
+                            console.log('You are not valid user to delete update');
+                        }
                     }
                 }
-                return singleReview;
+                return reviewList;
             })
 
             // since, reviews is not a model so it is not used for saving , instead of book which is a model 
@@ -105,16 +107,23 @@ const deleteAReviewById = (req, res, next) => {
         .then(book => {
             if (!book) res.status(400).json({ error: "Book not found" });
 
-            // delete specific review only
             // book.reviews = book.reviews.filter(singleReview => {    
             //     return singleReview.id !== req.params.review_id;
             // })
 
-            book.reviews.forEach(singleReview => {
+            // delete specific review only by authorized user
 
-                if(singleReview.user === req.user.id){
-                    if(singleReview.id !== req.params.review_id){
-                        return singleReview;
+            book.reviews = book.reviews.map(reviewList => {
+                //    if(singleReview === null) return;
+                if (reviewList !== null) {
+                    if (reviewList.id === req.params.review_id && reviewList !== null) {
+                        // const index = reviewList.deleteOne({id: req.params.review_id})
+                        // .then(() => console.log('Deleted !!'))
+                        // .catch(err => console.log(`Error message : ${err.message}`));
+                        console.log('Delete successfully only from authorized person');
+                    }
+                    else {
+                        return reviewList;
                     }
                 }
             })

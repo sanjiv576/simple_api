@@ -47,4 +47,16 @@ const verifyAdmin = (req, res, next) => {
     }
 };
 
-module.exports = { verifyUser, verifyAdmin };
+const verifyManager = (req, res, next) => {
+    if(req.user.role === 'manager' || req.user.role === 'admin'){
+        next();
+    }
+    else {
+        return res.status(403).json({ error: 'Not authorized' });
+
+    }
+}
+
+module.exports = { verifyUser, verifyAdmin, verifyManager };
+
+
