@@ -2,9 +2,9 @@
 // import 3rd party middleware for handling multipart/form-data like images/files
 const multer = require('multer');
 
-// impor]\
+// import uiid--> for generating unique IDs
 const uuid4 = require('uuid').v4;
-// 
+// import path ---> for reading the path
 const path = require('path');
 
 // where to store files/images
@@ -19,6 +19,7 @@ const storage = multer.diskStorage({
     const ext = path.extname(file.originalname.toLowerCase())
 
     // set filename that store in the disk storage by uusing fieldname,  unique id from uuid4 and its extension
+    // here, fieldname ==> means what developer use field name in UI design form
     cb(null, `${file.fieldname}${uuid4()}${ext}`)
 
     }

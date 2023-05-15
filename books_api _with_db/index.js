@@ -60,7 +60,7 @@ app.use('/books', verifyUser, books_routes);  // --> use 'verifUser' middleware 
 // 'photo' --> field name that is written in UI form to ensure the particular place where the image comes 
 // req.file --> send the proprities of the uploaded file
 
-app.post('/uploads', upload.single('photo'), (req, res, next) => {
+app.post('/uploads', upload.single('photo'), (req, res) => {
     res.json(req.file);
 })
 

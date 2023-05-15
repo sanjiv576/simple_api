@@ -40,7 +40,7 @@ const verifyUser = (req, res, next) => {
 const verifyAdmin = (req, res, next) => {
     // return error if it is not admin
     if (req.user.role !== 'admin') {
-        return res.status(403).json({ error: 'Not authorized to create book' });
+        return res.status(403).json({ error: 'Not authorized to create or delete book' });
     }
     else if (req.user.role === 'admin') {
         next();
