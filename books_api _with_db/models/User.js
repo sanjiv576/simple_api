@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    role : {
+    role: {
         type: String,
         enum: ['user', 'admin', 'manager'],  // fixed roles , add here others role like manager
         default: 'user'
@@ -29,13 +29,13 @@ const userSchema = new mongoose.Schema({
 });
 
 // convert Object id to String id and also delete password while returning user data
-userSchema.set('toJSON',{
+userSchema.set('toJSON', {
     transform: (document, returnedDocument) => {
         // convert object id to String id
         returnedDocument.id = document._id.toString(),
 
-        // delete unnecessary _id and version
-        delete returnedDocument._id;
+            // delete unnecessary _id and version
+            delete returnedDocument._id;
         delete returnedDocument.__v;
 
         // delete hashed password from the return document not from db

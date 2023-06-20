@@ -39,6 +39,7 @@ const createBook = (req, res, next) => {
 };
 
 const deleteAllBooks = (req, res, next) => {
+
     Book.deleteMany()
         .then(() => res.status(201).json({ "message": "Deleted all successfully" }))
         .catch(next);
@@ -61,11 +62,18 @@ const getABookById = (req, res, next) => {
 
 const updateABookById = (req, res, next) => {
     Book.findByIdAndUpdate(
-        req.params.book_id,  // find this id book
-        { $set: req.body },  // update the changed data
-        { new: true }  // return updated data not old one
+        req.params.book_id,  
+        { $set: req.body },  
+        { new: true }  
     )
-        .then(updatedBook => res.status(200).json(updatedBook))
+        .then(updatedTodo => {
+            if(updatedTodo.user === req.user.id){
+                res.status(200).json(updatedTodo);
+            }
+            else {
+                res.status(403).json({error: "Not authorized to update"})
+            }
+        })
         .catch(next)
 };
 
