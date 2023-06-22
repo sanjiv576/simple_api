@@ -5,4 +5,9 @@ const average = (numbers) =>{
     : total / numbers.length
 }
 
-module.exports = {average}
+
+const totalSum = (array) => {
+    return array.reduce((prev, curr) => prev + curr, 0);
+}
+
+module.exports = {average, totalSum}
