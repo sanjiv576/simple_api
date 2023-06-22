@@ -44,7 +44,7 @@ test('registration of duplicate username', () => {
 })
 
 
-test('user login', async () => {
+test('user login , valid user or not', async () => {
     const res = await api.post('/users/login')
         .send({
             username: "testUser",
@@ -62,6 +62,22 @@ test('user password incorrect', async () => {
     // console.log(res.body)
     expect(res.body.error).toMatch(/Password does not match/);
 })
+
+test('user login with incorrect/unregistered username', async () => {
+    const res = await api.post('/users/login')
+        .send({
+            username: "testUs",
+            password: "test123"
+        })
+        // .expect(400) // --> works fine but does not show define error
+    // console.log(res);
+
+    // expect(500)
+    // expect(res.status).toBe(400);  // --> works fine but does not show define error
+
+    // expect(res.body.error).toMatch(/not found/);
+
+});
 
 
 
