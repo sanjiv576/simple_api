@@ -6,7 +6,8 @@ describe('average test', () => {
         expect(result).toBe(2)
     })
     
-    test('test of [1]', () => {
+    // executes this test only , skip
+    test.only('test of [1]', () => {
         expect(average([1])).toBe(1)
     })
     

@@ -19,12 +19,16 @@ const upload = require('./middlewares/upload')
 
 // import mongoose database
 const mongoose = require('mongoose');
-const dbName = '30-b-books'
+// const dbName = '30-b-books'
 
+// Step 2:test
+
+// checking which env production or development, chooose env accordingly
+const MONGODB_URI=process.env.NODE_ENV === 'test' ? process.env.TEST_DB_URI : process.env.DB_URI;
 
 // connect database
-mongoose.connect('mongodb://127.0.0.1:27017/' + dbName)
-    .then(() => console.log('Connected successfully to the monogodb database server'))
+mongoose.connect(MONGODB_URI)
+    .then(() => console.log(`Connected successfully to ${MONGODB_URI} the monogodb database server`))
     .catch((err) => console.log(err));
 
 // create object of express 
