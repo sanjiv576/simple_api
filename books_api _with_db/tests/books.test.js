@@ -59,8 +59,8 @@ test('logged in user can get all books', async () => {
         .set('authorization', `bearer ${token}`)
         .expect(200)
 
-        // test book containing war is there or not
-        expect(res.body[0].title).toMatch(/War/)
+    // test book containing war is there or not
+    expect(res.body[0].title).toMatch(/War/)
 
 });
 
